@@ -27,7 +27,7 @@
  */
 
 #include <easyflash.h>
-#include <rtthread.h>
+
 
 #if defined(RT_USING_FINSH) && defined(FINSH_USING_MSH) && defined(EF_USING_ENV)
 #include <finsh.h>
