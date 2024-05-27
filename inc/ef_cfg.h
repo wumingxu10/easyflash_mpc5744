@@ -26,47 +26,42 @@
  * Created on: 2015-07-14
  */
 
-
 #ifndef EF_CFG_H_
 #define EF_CFG_H_
 
-#include <rtconfig.h>
-
-/* using ENV function */
-#ifdef PKG_EASYFLASH_ENV
+/* using ENV function, default is NG (Next Generation) mode start from V4.0 */
 #define EF_USING_ENV
 
-#ifdef PKG_EASYFLASH_ENV_AUTO_UPDATE
+#ifdef EF_USING_ENV
 /* Auto update ENV to latest default when current ENV version number is changed. */
-#define EF_ENV_AUTO_UPDATE
+/* #define EF_ENV_AUTO_UPDATE */
 /**
  * ENV version number defined by user.
  * Please change it when your firmware add a new ENV to default_env_set.
  */
-#define EF_ENV_VER_NUM            PKG_EASYFLASH_ENV_VER_NUM
-#endif
+#define EF_ENV_VER_NUM            0/* @note you must define it for a value, such as 0 */
 
-#endif /* PKG_EASYFLASH_ENV */
+/* MCU Endian Configuration, default is Little Endian Order. */
+#define EF_BIG_ENDIAN
+
+#endif /* EF_USING_ENV */
 
 /* using IAP function */
-#ifdef PKG_EASYFLASH_IAP
-#define EF_USING_IAP
-#endif
+//#define EF_USING_IAP
 
 /* using save log function */
-#ifdef PKG_EASYFLASH_LOG
-#define EF_USING_LOG
-/* saved log area size */
-#define LOG_AREA_SIZE             (PKG_EASYFLASH_LOG_AREA_SIZE)
-#endif
+/* #define EF_USING_LOG */
 
-/* the minimum size of flash erasure */
-#define EF_ERASE_MIN_SIZE         PKG_EASYFLASH_ERASE_GRAN
+/* The minimum size of flash erasure. May be a flash sector size. */
+#define EF_ERASE_MIN_SIZE          (64 * 1024)/* @note you must define it for a value */
 
 /* the flash write granularity, unit: bit
  * only support 1(nor flash)/ 8(stm32f4)/ 32(stm32f1)/ 64(stm32l4) */
-#define EF_WRITE_GRAN             (PKG_EASYFLASH_WRITE_GRAN)
+#define EF_WRITE_GRAN             (64)/* @note you must define it for a value */
 
+
+/* The size of read_env and continue_ff_addr function used*/
+#define EF_READ_BUF_SIZE             32     /* @default 32, Larger numbers can improve first-time speed of alloc_env but require more stack space*/
 /*
  *
  * This all Backup Area Flash storage index. All used flash area configure is under here.
@@ -89,14 +84,15 @@
  */
 
 /* backup area start address */
-#define EF_START_ADDR             PKG_EASYFLASH_START_ADDR
+#define EF_START_ADDR             0/* @note you must define it for a value */
 
 /* ENV area size. It's at least one empty sector for GC. So it's definition must more then or equal 2 flash sector size. */
-#define ENV_AREA_SIZE             (EF_ERASE_MIN_SIZE * 2) /* default is the double erase min size */
+#define ENV_AREA_SIZE             (EF_ERASE_MIN_SIZE * 3)/* @note you must define it for a value if you used ENV */
+
+/* saved log area size */
+#define LOG_AREA_SIZE             /* @note you must define it for a value if you used log */
 
 /* print debug information of flash */
-#ifdef PKG_EASYFLASH_DEBUG
 #define PRINT_DEBUG
-#endif
 
 #endif /* EF_CFG_H_ */
